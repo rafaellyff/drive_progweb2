@@ -7,7 +7,7 @@ class ArquivosController < ApplicationController
 
 	def upload_arquivo	
 		@arquivo = Arquivo.new
-		diretorio = "#{Rails.root}/arquivos/#{params[:diretorio]}"
+		diretorio = "#{Rails.root}/public/arquivos/#{params[:diretorio]}"
 		@arquivo.diretorio = params[:diretorio]
 		Arquivo.upload_arquivo(params[:arquivo], diretorio)
 		@arquivo.nome = params[:arquivo].split('C:\\fakepath\\')[1]
@@ -17,9 +17,8 @@ class ArquivosController < ApplicationController
 	end
 
 	def download
-		nome = Arquivo.find(params[:arquivo])
-		arquivo = "#{Rails.root}/arquivos/#{params[:diretorio]}/#{nome.nome}"
-		send_file(arquivo, filename: nome.nome, :disposition => 'attachment')
+		@arquivo = Arquivo.find(params[:arquivo])
+		render json: @arquivo
 	end
 
 	def deletar 

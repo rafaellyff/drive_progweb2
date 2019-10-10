@@ -38,7 +38,7 @@ $(function (){
 
 
 	// ROTAS PARA CHAMAR AS FUNÇÕES
-	if (window.location.pathname != "/" || window.location.pathname !="/pessoas/login" ){
+	if (window.location.pathname != "/" || window.location.pathname !="/pessoas/login/" ){
 		var usuario = localStorage.getItem("usuario");
 		if (usuario != null) {
 			$("#menu").show();
@@ -51,9 +51,10 @@ $(function (){
 			}
 		} else {
 			$("#menu").hide();
-			if (carregar) {
-				// carregar = false;
-				//	$(location).attr('href', '/pessoas/login/');
+			if (window.location.pathname != "/pessoas/login/"){
+				if(window.location.pathname != "/pessoas/new"){
+					$(location).attr('href', '/pessoas/login/');
+				}
 			}
 		}
 	}
@@ -326,19 +327,30 @@ function arquivos(){
 }
 
 function download_arquivos(){
-  //  var filepath = $(this).attr('data-filepath');
-  //  location.href = filepath;
-	 var arquivo = $(this).data('id');
-	 alert(arquivo);
-	 var diretorio = window.location.pathname.replace(/[^0-9]/g,'');
-	// //alert("<%= Rails.root%>");
-	// window.location.href = "/home/rafaelly/drive_progweb2/arquivos/"+diretorio+"/	"+ arquivo;
-	 $.ajax({
-	 	type: 'POST',
-	 	data: {arquivo: arquivo, diretorio: diretorio},
-	 	url: '/arquivos/download',
-	 	dataType: "json",
-	 })
+	var arquivo = $(this).data('id');
+	var diretorio = window.location.pathname.replace(/[^0-9]/g,'');
+	var nome;
+	$.ajax({
+		type: 'POST',
+		data: {arquivo: arquivo},
+		url: '/arquivos/download',
+		dataType:"json",
+	}).done(function( response ) {
+		nome = response.nome;
+	});
+
+	fetch("/public/arquivos/"+diretorio+"/	"+ arquivo)
+	.then(resp => resp.blob())
+	.then(blob => {
+		const url = window.URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = url;
+		a.download = nome;
+		document.body.appendChild(a);
+		a.click();
+		window.URL.revokeObjectURL(url);
+	}).catch(() => alert('Erro no download'));
 }
 
 function delete_arquivo(event){
