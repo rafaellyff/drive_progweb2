@@ -1,6 +1,6 @@
-# API - DISCIPLINA DE PROG WEB 2
+# DRIVE - DISCIPLINA DE PROG WEB 2
 
-Esse projeto foi criado com o objetivo de ser o trabalho 1 da disciplina de Programação Web 2 ministrada pelo professor Leonardo Moreira no semestre letivo 2019.2 do curso Sistemas e Mídias Digitais da Univerdade Federal do Ceará. 
+Esse projeto foi criado com o objetivo de ser o trabalho 2 da disciplina de Programação Web 2 ministrada pelo professor Leonardo Moreira no semestre letivo 2019.2 do curso Sistemas e Mídias Digitais da Univerdade Federal do Ceará. 
 
 
 #### Responsáveis pelo Projeto:
@@ -25,10 +25,8 @@ Baixe o projeto clicando no botão verde escrito "Clone or download" e escolha a
 
 #### 2. Criando o Banco de Dados
 
-<<<<<<< HEAD
-* ...
 # drive_progweb2
-=======
+
 
 Na interface do PostgreSQL crie uma database com o nome **desenv** e dentro dela um schema com o nome de **api_web2**
 
@@ -63,5 +61,3 @@ Segue abaixo como você deve executar o projeto após a primeira instalação:
 > rails s 
 
 Basta subir o servidor normalmente e acessar a url http://localhost:3000/
->>>>>>> 336feeeab484d987cf781d309ec563f1771330a1
-# drive_progweb2
