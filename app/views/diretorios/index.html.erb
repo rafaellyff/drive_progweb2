@@ -1,0 +1,33 @@
+<h1 class="m-b-30 text-center text-secondary font-weight-bold">Seus arquivos</h1>
+<div class="row">
+  <div class=" col-lg-4 offset-lg-4">
+    <div class="input-group">
+      <input type="type" name="diretorio" id="diretorio" placeholder="Nome" class="form-control">
+      <div class="input-group-append">
+        <button class="btn btn-success" onclick="addDiretorio()">Criar Pasta</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<table>
+  <tbody>
+    <% @diretorios.each do |diretorio| %>
+      <tr>
+        <td><%= diretorio.nome %></td>
+        <td><%= diretorio.pessoa %></td>
+        <td><%= diretorio.diretorio_id %></td>
+        <td><%= link_to 'Show', diretorio %></td>
+        <td><%= link_to 'Edit', edit_diretorio_path(diretorio) %></td>
+        <td><%= link_to 'Destroy', diretorio, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Diretorio', new_diretorio_path %>

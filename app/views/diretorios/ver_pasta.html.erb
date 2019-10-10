@@ -1,0 +1,43 @@
+<div class="row">
+	<div class="col-lg-1">
+		<button class="btn btn-danger" onclick="deletarPasta()"><i class="fa fa-trash"></i></button>
+	</div>
+	<div class="col-lg-7">
+		<h3 class="m-b-30 text-secondary font-weight-bold" id="nome"></h3>
+	</div>
+	<div class="col-lg-4">
+
+		<div class="input-group">
+			<input type="text" name="diretorio" id="nome_sub" placeholder="Nome" class="form-control">
+			<div class="input-group-append">
+				<button class="btn btn-success" onclick="addSubDiretorio()">Criar Pasta</button>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<div class="row" id="pastas">
+</div>
+<br>
+<div class="row">
+<div class="col-lg-4">
+
+		
+				<div class="form-group">
+					<input type="file" class="form-control" id="anexo_arquivo">
+				</div> 
+				<div class="form-group">
+					<button class="btn btn-success btn-block" onclick="upload()">Upload</button>
+				</div>
+		<br>
+	</div>
+<div class="col-lg-8">
+	
+<table class="table">
+  <tbody id="arquivos">
+
+  </tbody>
+</table>
+</div>
+</div>
+

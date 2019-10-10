@@ -1,0 +1,2 @@
+class Diretorio < ApplicationRecord
+end

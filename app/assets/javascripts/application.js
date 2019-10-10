@@ -33,7 +33,8 @@ $(function (){
 
 	// TELA DE NOVO
 	$('#novo').on('click', novo);
-	
+
+
 	// ROTAS PARA CHAMAR AS FUNÇÕES
 	if( window.location.pathname.match(/listagem/)){
 		listagem();
@@ -61,18 +62,18 @@ function listagem(){
 
 // ABRIR TELA DE VISUALIZAR
 function ver(event){
-  event.preventDefault();
-  var thisId = $(this).data('id');
-  $(location).attr('href', '/pessoas/ver/'+ thisId);
+	event.preventDefault();
+	var thisId = $(this).data('id');
+	$(location).attr('href', '/pessoas/ver/'+ thisId);
 }
 
 // PREENCHER TELA DE VISUALIZAR 
 function preencherVer(){
 	var id = window.location.pathname.replace(/[^0-9]/g,'');
 	$.getJSON('/pessoas/' + id).done(function(data) {
-    $('#nome').text(data.nome);
-    $('#login').text(data.login);
-  });
+		$('#nome').text(data.nome);
+		$('#login').text(data.login);
+	});
 }
 
 // DELETAR ITEM
@@ -93,9 +94,9 @@ function deletar(event) {
 
 // ABRIR TELA DE EDITAR 
 function editar(event){
-  event.preventDefault();
-  var thisId = $(this).data('id');
-  $(location).attr('href', '/pessoas/'+ thisId+'/edit');
+	event.preventDefault();
+	var thisId = $(this).data('id');
+	$(location).attr('href', '/pessoas/'+ thisId+'/edit');
 }
 
 // PREENCHER FORM DE EDITAR
@@ -148,10 +149,10 @@ function adicionar(event) {
 
 	if (nome != "" && login != "" && senha != "") {
 		$.ajax({
-		type: 'POST',
-		data: {login: login},
-		url: '/pessoas/verificar_login',
-		dataType:"json",
+			type: 'POST',
+			data: {login: login},
+			url: '/pessoas/verificar_login',
+			dataType:"json",
 
 
 		}).done(function( response ) {
@@ -195,4 +196,143 @@ function voltar(){
 // ABRIR TELA DE NOVO
 function novo(){
 	$(location).attr('href', '/pessoas/new');
+}
+
+
+// DIRETÓRIOS
+
+$(function () {
+	preencherVerDiretorio();
+	$('#pastas').on('click', '.verDiretorio', verPasta);
+	$('#arquivos').on('click', '.btnDownload', download_arquivos);
+	$('#arquivos').on('click', '.btnDeletarArquivo', delete_arquivo);
+	arquivos();
+});
+function preencherVerDiretorio(){
+	var id = window.location.pathname.replace(/[^0-9]/g,'');
+	$.getJSON('/diretorios/' + id).done(function(data) {
+		preencherVerSubDiretorio(data.id);
+		$('#nome').text(data.nome);
+	});
+}
+
+function preencherVerSubDiretorio(id){
+	var $pastas = $('#pastas'); 
+	$('.btn-outline-secondary').remove();
+	$.ajax({  
+		type: 'POST',
+		dataType: 'json',
+		data: {id: id} ,
+		url: '/diretorios/sub_pastas',
+		success: function(diretorios){
+			$.each(diretorios, function(i, diretorio) {
+				$pastas.append('<a href="#" class="btn btn-outline-secondary m-10 verDiretorio" data-id="' + this.id + '"><i class="fa fa-folder-open" ></i> '+this.nome+'</a>');
+			});
+		}
+	});
+}
+
+function addSubDiretorio() {
+	
+	var nome =  $('#nome_sub').val();
+	var diretorio_id = window.location.pathname.replace(/[^0-9]/g,'');
+	var diretorio = {
+		"diretorio": { 'nome': nome , "diretorio_id": diretorio_id}
+	}
+	if (nome != "") {
+		$.ajax({
+			type: 'POST',
+			data: diretorio,
+			url: '/diretorios',
+			dataType:"json",
+		}).done(function( response ) {
+			preencherVerSubDiretorio(diretorio_id);
+			$('#nome_sub').val("");
+		});
+	} else {
+		alert("Nenhum dos campos pode ficar vazio!")
+	}
+};
+
+function verPasta(){
+	var thisId = $(this).data('id');
+	$(location).attr('href', '/diretorios/ver_pasta/'+ thisId);
+}
+
+function deletarPasta() {
+	var confirmation = confirm('Você tem certeza que deseja excluir essa pasta? Com isso você excluirá tudo que tem dentro dela');
+	if (confirmation === true) {
+		var id =  window.location.pathname.replace(/[^0-9]/g,'');
+		$.ajax({
+			type: 'DELETE',
+			url: '/diretorios/' + id
+		}).done(function( response ) {
+			window.history.back();
+		});
+	}else {
+		return false;
+	}
+};
+
+
+function upload(){
+	var arquivo = $("#anexo_arquivo").val();
+	var diretorio =  window.location.pathname.replace(/[^0-9]/g,'');
+	if (arquivo != "") {
+		$.ajax({
+			type: 'POST',
+			data: {arquivo: arquivo, diretorio: diretorio},
+			url: '/arquivos/upload_arquivo',
+			dataType:"json",
+		}).done(function( response ) {
+			alert("foi caralho");
+		});
+	} else {
+		alert("Nenhum arquivo anexado!")
+	}
+}
+
+function arquivos(){
+	var $arquivos = $('#arquivos'); 
+	var id = window.location.pathname.replace(/[^0-9]/g,'');
+	$.ajax({  
+		type: 'GET',
+		dataType: 'json',
+		data: {diretorio: id} ,
+		url: '/arquivos/listagem_arquivos',
+		success: function(arquivos){
+			$.each(arquivos, function(i, arquivo) {
+
+				$arquivos.append('<tr><td>'+this.nome+'</td><td><a href="#" class="btn btn-info text-white btnDownload" data-id="' + this.nome + '"><i class="fa fa-download"></i></a></td><td><a href="#" class="btn btn-danger text-white btnDeletarArquivo" data-id="' + this.id + '"><i class="fa fa-trash"></i></a></td></tr>');
+			});
+		}
+	});
+}
+
+function download_arquivos(){
+	var arquivo = $(this).data('id');
+	var diretorio = window.location.pathname.replace(/[^0-9]/g,'');
+	//alert("<%= Rails.root%>");
+	window.location.href = "/home/rafaelly/drive_progweb2/arquivos/"+diretorio+"/	"+ arquivo;
+	// $.ajax({
+	// 	type: 'POST',
+	// 	data: {arquivo: arquivo, diretorio: diretorio},
+	// 	url: '/arquivos/download',
+	// 	dataType: "json",
+	// })
+}
+
+function delete_arquivo(event){
+	event.preventDefault();
+	var confirmation = confirm('Você tem certeza que deseja excluir esse registro?');
+	if (confirmation === true) {
+		$.ajax({
+			type: 'DELETE',
+			url: '/arquivos/' + $(this).data('id')
+		}).done(function( response ) {
+			location.reload(true);
+		});
+	}else {
+		return false;
+	}
 }

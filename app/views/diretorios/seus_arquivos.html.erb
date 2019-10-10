@@ -1,0 +1,71 @@
+<h1 class="m-b-30 text-center text-secondary font-weight-bold">Seus arquivos</h1>
+<div class="row">
+  <div class=" col-lg-4 offset-lg-4">
+    <div class="input-group">
+      <input type="text" name="diretorio" id="nome" placeholder="Nome" class="form-control">
+      <div class="input-group-append">
+        <button class="btn btn-success" onclick="addDiretorio()">Criar Pasta</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="row" id="pastas">
+</div>
+
+
+
+<script type="text/javascript">
+
+	
+$(function (){
+
+	$('#pastas').on('click', '.verDiretorio', verPasta);
+	listaDiretorios();
+});
+function addDiretorio() {
+  //event.preventDefault();
+  var nome =  $('#nome').val();
+  var diretorio = {
+    "diretorio": { 'nome': nome }
+  }
+  if (nome != "") {
+    $.ajax({
+      type: 'POST',
+      data: diretorio,
+      url: '/diretorios',
+      dataType:"json",
+    }).done(function( response ) {
+      listaDiretorios();
+    });
+  } else {
+    alert("Nenhum dos campos pode ficar vazio!")
+  }
+};
+
+
+function listaDiretorios(){
+	var $pastas = $('#pastas'); 
+	$('.btn-outline-secondary').remove();
+	var usuario =  localStorage.getItem('usuario');
+	$.ajax({  
+		type: 'GET',
+		dataType: 'json',
+		data: usuario ,
+		url: '/diretorios',
+		success: function(diretorios){
+			$.each(diretorios, function(i, diretorio) {
+				$pastas.append('<a href="#" class="btn btn-outline-secondary m-10 verDiretorio" data-id="' + this.id + '"><i class="fa fa-folder-open" ></i> '+this.nome+'</a>');
+			
+			});
+			$('#nome').val("");
+		}
+	});
+}
+
+function verPasta(){
+ 	var thisId = $(this).data('id');
+  	$(location).attr('href', '/diretorios/ver_pasta/'+ thisId);
+}
+
+</script>

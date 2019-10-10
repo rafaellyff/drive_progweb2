@@ -19,6 +19,11 @@ class PessoasController < ApplicationController
     render json: verificacao
   end
 
+  def logar
+    verificacao = Pessoa.validar_sessao(params[:login], params[:senha]).to_json
+    render json: verificacao
+  end
+
   # POST /pessoas
   # POST /pessoas.json
   def create

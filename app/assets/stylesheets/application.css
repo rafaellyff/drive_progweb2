@@ -12,10 +12,15 @@
  *
  *= require_tree .
  *= require_self
+ *= require font-awesome
  */
 
 .container {
 	margin-top: 60px;
+}
+
+.m-10 {
+	margin: 10px;
 }
 
 .m-b-30{

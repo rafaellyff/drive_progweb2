@@ -1,0 +1,32 @@
+<%= form_with(model: diretorio, local: true) do |form| %>
+  <% if diretorio.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(diretorio.errors.count, "error") %> prohibited this diretorio from being saved:</h2>
+
+      <ul>
+      <% diretorio.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nome %>
+    <%= form.text_field :nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :pessoa_id %>
+    <%= form.text_field :pessoa_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :diretorio_id %>
+    <%= form.number_field :diretorio_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
