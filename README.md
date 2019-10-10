@@ -25,10 +25,7 @@ Baixe o projeto clicando no botão verde escrito "Clone or download" e escolha a
 
 #### 2. Criando o Banco de Dados
 
-# drive_progweb2
-
-
-Na interface do PostgreSQL crie uma database com o nome **desenv** e dentro dela um schema com o nome de **api_web2**
+Na interface do PostgreSQL crie uma database com o nome **desenv** e dentro dela um schema com o nome de **drive_web2**
 
 *Obs: é necessário que o usuário e senha de acesso ao banco postgreSQL sejam alterados no arquivo database.yml*
 
