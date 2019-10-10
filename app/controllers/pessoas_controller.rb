@@ -29,7 +29,8 @@ class PessoasController < ApplicationController
   def create
     @pessoa = Pessoa.new(pessoa_params)
     if @pessoa.save
-      render json:  @pessoa
+      @diretorio = Diretorio.create(nome: "Arquivos - " + @pessoa.nome, pessoa_id: @pessoa.id)
+      render json:  {id: @diretorio.id , usuario: @pessoa.id}
     else
       render json: @pessoa.errors, status: :unprocessable_entity
     end

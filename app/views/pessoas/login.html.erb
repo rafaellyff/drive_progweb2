@@ -15,34 +15,10 @@
           </div>
           <br>
           <button class="btn btn-lg btn-info btn-block" onclick="logar()">Entrar</button> 
-          
+          <br>
+          <button class="btn btn-sencondary btn-block" id="novo">Cadastre-se</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-
-function logar(){
-  var login = $('#login_email').val(); 
-  var senha =  $('#login_senha').val();
-  if (login != "" && senha != "") {
-    $.ajax({
-      type: 'POST',
-      data: {login: login, senha: senha},
-      url: '/pessoas/logar',
-      dataType:"json"
-    }).done(function( response ) {
-      if (response.entrar == true) {
-        localStorage.setItem("usuario", response.usuario);
-      } else {
-        alert("Email ou senha inválidos");
-      }
-    });
-  } else {
-    alert("Preencha todas as informações");
-  }
-}
-
-</script>

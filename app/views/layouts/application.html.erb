@@ -14,6 +14,16 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="menu">
+      <b class="navbar-brand"> DRIVE</b>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse">
+        <button class="btn btn-secondary my-2 my-sm-0" id="sair" onclick="sair()"><i class="fa fa-sign-out"></i></button>
+      </div>
+    </nav>
     <div class="container">
       <%= yield %>
     </div>

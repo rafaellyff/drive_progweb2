@@ -15,8 +15,10 @@
 //= require turbolinks
 //= require_tree .
 
+var carregar = true;
 
 $(function (){
+	console.log(carregar);
 	// AÇÕES DA TABELA DE LISTAGEM
 	$('#listagem').on('click', '.btnVer', ver);
 	$('#listagem').on('click', '.btnEditar', editar)
@@ -36,12 +38,24 @@ $(function (){
 
 
 	// ROTAS PARA CHAMAR AS FUNÇÕES
-	if( window.location.pathname.match(/listagem/)){
-		listagem();
-	} else if ( window.location.pathname.match(/edit/)) {
-		form_editar();
-	} else if (window.location.pathname.match(/ver/)){
-		preencherVer();
+	if (window.location.pathname != "/" || window.location.pathname !="/pessoas/login" ){
+		var usuario = localStorage.getItem("usuario");
+		if (usuario != null) {
+			$("#menu").show();
+			if( window.location.pathname.match(/listagem/)){
+				listagem();
+			} else if ( window.location.pathname.match(/edit/)) {
+				form_editar();
+			} else if (window.location.pathname.match(/ver/)){
+				preencherVer();
+			}
+		} else {
+			$("#menu").hide();
+			if (carregar) {
+				// carregar = false;
+				//	$(location).attr('href', '/pessoas/login/');
+			}
+		}
 	}
 });
 
@@ -176,7 +190,8 @@ function adicionar(event) {
 
 
 				}).done(function( response ) {
-					$(location).attr('href', '/pessoas/ver/'+response.id);
+					$(location).attr('href', '/diretorios/ver_pasta/'+response.id);
+      		localStorage.setItem("usuario", response.usuario);
 				});
 			} else {
 				alert("O email escolhido já está em uso")
@@ -190,7 +205,7 @@ function adicionar(event) {
 
 // VOLTAR PARA A TELA DE LISTAGEM
 function voltar(){
-	$(location).attr('href', '/pessoas/listagem');
+	$(location).attr('href', '/pessoas/login');
 }
 
 // ABRIR TELA DE NOVO
@@ -233,7 +248,7 @@ function preencherVerSubDiretorio(id){
 }
 
 function addSubDiretorio() {
-	
+
 	var nome =  $('#nome_sub').val();
 	var diretorio_id = window.location.pathname.replace(/[^0-9]/g,'');
 	var diretorio = {
@@ -285,7 +300,7 @@ function upload(){
 			url: '/arquivos/upload_arquivo',
 			dataType:"json",
 		}).done(function( response ) {
-			alert("foi caralho");
+			arquivos();
 		});
 	} else {
 		alert("Nenhum arquivo anexado!")
@@ -294,6 +309,7 @@ function upload(){
 
 function arquivos(){
 	var $arquivos = $('#arquivos'); 
+	$('.linha_arquivos').remove();
 	var id = window.location.pathname.replace(/[^0-9]/g,'');
 	$.ajax({  
 		type: 'GET',
@@ -302,24 +318,27 @@ function arquivos(){
 		url: '/arquivos/listagem_arquivos',
 		success: function(arquivos){
 			$.each(arquivos, function(i, arquivo) {
-
-				$arquivos.append('<tr><td>'+this.nome+'</td><td><a href="#" class="btn btn-info text-white btnDownload" data-id="' + this.nome + '"><i class="fa fa-download"></i></a></td><td><a href="#" class="btn btn-danger text-white btnDeletarArquivo" data-id="' + this.id + '"><i class="fa fa-trash"></i></a></td></tr>');
+				$arquivos.append('<tr class="linha_arquivos"><td>'+this.nome+'</td><td><a data-id="'+ this.id+'" class="btn btn-info text-white btnDownload" ><i class="fa fa-download"></i></a></td><td><a href="#" class="btn btn-danger text-white btnDeletarArquivo" data-id="' + this.id + '"><i class="fa fa-trash"></i></a></td></tr>');
 			});
 		}
 	});
+	$('#anexo_arquivo').val("");
 }
 
 function download_arquivos(){
-	var arquivo = $(this).data('id');
-	var diretorio = window.location.pathname.replace(/[^0-9]/g,'');
-	//alert("<%= Rails.root%>");
-	window.location.href = "/home/rafaelly/drive_progweb2/arquivos/"+diretorio+"/	"+ arquivo;
-	// $.ajax({
-	// 	type: 'POST',
-	// 	data: {arquivo: arquivo, diretorio: diretorio},
-	// 	url: '/arquivos/download',
-	// 	dataType: "json",
-	// })
+  //  var filepath = $(this).attr('data-filepath');
+  //  location.href = filepath;
+	 var arquivo = $(this).data('id');
+	 alert(arquivo);
+	 var diretorio = window.location.pathname.replace(/[^0-9]/g,'');
+	// //alert("<%= Rails.root%>");
+	// window.location.href = "/home/rafaelly/drive_progweb2/arquivos/"+diretorio+"/	"+ arquivo;
+	 $.ajax({
+	 	type: 'POST',
+	 	data: {arquivo: arquivo, diretorio: diretorio},
+	 	url: '/arquivos/download',
+	 	dataType: "json",
+	 })
 }
 
 function delete_arquivo(event){
@@ -335,4 +354,47 @@ function delete_arquivo(event){
 	}else {
 		return false;
 	}
+}
+
+
+// LOGIN
+
+function logar(){
+  var login = $('#login_email').val(); 
+  var senha =  $('#login_senha').val();
+  if (login != "" && senha != "") {
+    $.ajax({
+      type: 'POST',
+      data: {login: login, senha: senha},
+      url: '/pessoas/logar',
+      dataType:"json"
+    }).done(function( response ) {
+      if (response.entrar == true) {
+      	localStorage.setItem("usuario", response.usuario);
+      	home();
+      } else {
+        alert("Email ou senha inválidos");
+      }
+    });
+  } else {
+    alert("Preencha todas as informações");
+  }
+}
+
+function sair(){
+	localStorage.removeItem("usuario");
+	$(location).attr('href', '/pessoas/login');
+}
+
+function home(){
+	var usuario = localStorage.getItem("usuario");
+	$.ajax({  
+		type: 'POST',
+		data: {id: usuario} ,
+		dataType: 'json',
+		url: '/diretorios/seu_diretorio/'
+	}).done(function( response ) {
+		console.log(response);
+		$(location).attr('href', '/diretorios/ver_pasta/'+ response.id);
+	}); 
 }

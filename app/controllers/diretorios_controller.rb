@@ -1,10 +1,8 @@
 class DiretoriosController < ApplicationController
   before_action :set_diretorio, only: [:show, :edit, :update, :destroy]
 
-  # GET /diretorios
-  # GET /diretorios.json
-  def index
-    @diretorios = Diretorio.where(pessoa_id: params[:usuario]).first
+  def seu_diretorio
+    @diretorios = Diretorio.where(pessoa_id: params[:id]).first
     render json: @diretorios
   end
 

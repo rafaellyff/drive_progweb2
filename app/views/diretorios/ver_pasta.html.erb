@@ -1,12 +1,12 @@
 <div class="row">
-	<div class="col-lg-1">
-		<button class="btn btn-danger" onclick="deletarPasta()"><i class="fa fa-trash"></i></button>
+	<div class="col-lg-2">
+		<button class="btn btn-info" onclick="home()"><i class="fa fa-home"></i></button>
+		<button class="btn btn-danger" id="apagar_pasta" onclick="deletarPasta()"><i class="fa fa-trash"></i></button>
 	</div>
-	<div class="col-lg-7">
+	<div class="col-lg-6">
 		<h3 class="m-b-30 text-secondary font-weight-bold" id="nome"></h3>
 	</div>
 	<div class="col-lg-4">
-
 		<div class="input-group">
 			<input type="text" name="diretorio" id="nome_sub" placeholder="Nome" class="form-control">
 			<div class="input-group-append">
@@ -20,24 +20,20 @@
 </div>
 <br>
 <div class="row">
-<div class="col-lg-4">
-
-		
-				<div class="form-group">
-					<input type="file" class="form-control" id="anexo_arquivo">
-				</div> 
-				<div class="form-group">
-					<button class="btn btn-success btn-block" onclick="upload()">Upload</button>
-				</div>
+	<div class="col-lg-4">
+		<div class="form-group">
+			<input type="file" class="form-control" id="anexo_arquivo">
+		</div> 
+		<div class="form-group">
+			<button class="btn btn-success btn-block" onclick="upload()">Upload</button>
+		</div>
 		<br>
 	</div>
-<div class="col-lg-8">
-	
-<table class="table">
-  <tbody id="arquivos">
-
-  </tbody>
-</table>
-</div>
+	<div class="col-lg-8">
+		<table class="table">
+			<tbody id="arquivos">
+			</tbody>
+		</table>
+	</div>
 </div>
 

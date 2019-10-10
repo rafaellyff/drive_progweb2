@@ -17,8 +17,9 @@ class ArquivosController < ApplicationController
 	end
 
 	def download
-		arquivo = "#{Rails.root}/arquivos/#{params[:diretorio]}/#{params[:arquivo]}"
-		send_file arquivo 
+		nome = Arquivo.find(params[:arquivo])
+		arquivo = "#{Rails.root}/arquivos/#{params[:diretorio]}/#{nome.nome}"
+		send_file(arquivo, filename: nome.nome, :disposition => 'attachment')
 	end
 
 	def deletar 
